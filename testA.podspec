@@ -21,16 +21,32 @@ Pod::Spec.new do |s|
 TODO: Add long description of the pod here.
                        DESC
 
-  s.homepage         = 'https://github.com/893833976@qq.com/testA'
+  s.homepage         = 'https://github.com/DecembeGrirl/testA'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { '893833976@qq.com' => 'yangshuyuan@kkworld.com' }
-  s.source           = { :git => 'https://github.com/893833976@qq.com/testA.git', :tag => s.version.to_s }
+  s.author           = { 'dev' => 'yangshuyuan@kkworld.com' }
+  s.source           = { :git => 'https://github.com/DecembeGrirl/testA.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '9.0'
+  s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'}
+  s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'}
 
-  s.source_files = 'testA/Classes/**/*'
+  if ENV['IS_SOURCE'] || ENV[s.name]
+    s.default_subspec = 'source'
+  else
+    s.default_subspec = 'framework'
+  end
+
+  s.subspec 'source' do |ss|
+    ss.source_files = 'testA/Classes/**/*.{h,m}'
+  end
+
+  s.subspec 'framework' do |ss|
+    ss.vendored_frameworks = 'testA/*.framework'
+  end
+
+  # s.source_files = 'testA/Classes/**/*'
   
   # s.resource_bundles = {
   #   'testA' => ['testA/Assets/*.png']
